@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserModal } from './components';
-import { LoginForm, decodeJWT, Header, checkModuleAccess, Sidebar, getFirstAuthorizedModule } from '../../shared_components';
+import { LoginForm, decodeJWT, Header, checkModuleAccess, Sidebar, getFirstAuthorizedModule, fetchWithAuth } from '../../shared_components';
 
 function App() {
   const [usuarios, setUsuarios] = useState([]);

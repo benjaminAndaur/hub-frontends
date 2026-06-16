@@ -1,4 +1,4 @@
-import { fetchWithAuth } from '../../shared_components/apiClient';
+import { fetchWithAuth } from '../../../shared_components/apiClient';
 
 export const api = {
   async get(endpoint) {

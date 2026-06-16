@@ -124,7 +124,7 @@ function MantencionList() {
                     <div className="text-xs text-slate-500">{elVeh?.modelo}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-slate-400">{elMec ? `${elMec.nombre} ${elMec.apellido}` : '—'}</span>
+                    <span className="text-sm text-slate-400">{elMec ? `${elMec.nombre} ${elMec.apellido1}` : '—'}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-xs font-mono space-y-0.5">

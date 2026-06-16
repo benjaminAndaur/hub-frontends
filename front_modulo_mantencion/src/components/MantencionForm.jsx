@@ -144,7 +144,7 @@ function MantencionForm() {
               <select name="mecanico_id" required value={formData.mecanico_id} onChange={handleChange} className="select-dark">
                 <option value="">Seleccione Mecánico (RRHH)</option>
                 {mecanicos.map(m => (
-                  <option key={m.id} value={m.id}>{m.nombre} {m.apellido}</option>
+                  <option key={m.id} value={m.id}>{m.nombre} {m.apellido1}</option>
                 ))}
               </select>
             </div>

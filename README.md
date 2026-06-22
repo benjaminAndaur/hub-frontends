@@ -1,10 +1,13 @@
 # hub-frontends
 
-Frontends (React/Vite) del Hub Empresarial. Cada módulo es una SPA independiente, servida por Nginx bajo su propio path, que consume las APIs del repo [`hub-backends`](https://github.com/benjaminAndaur/hub-backends).
+Frontends (React/Vite) del Hub Empresarial. Cada módulo es una SPA independiente, servida por Nginx bajo su propio path, que consume las APIs de [`hub-backends`](https://github.com/benjaminAndaur/hub-backends), [`hub-ms-operacion`](https://github.com/benjaminAndaur/hub-ms-operacion) y [`hub-ms-facturacion`](https://github.com/benjaminAndaur/hub-ms-facturacion).
 
 Repos relacionados:
 - [`hub-backends`](https://github.com/benjaminAndaur/hub-backends) — microservicios Python/Quart
 - [`hub-infra`](https://github.com/benjaminAndaur/hub-infra) — nginx, base de datos y `docker-compose.yml`
+- [`hub-ms-operacion`](https://github.com/benjaminAndaur/hub-ms-operacion) — microservicio de viajes, BD propia
+- [`hub-ms-facturacion`](https://github.com/benjaminAndaur/hub-ms-facturacion) — microservicio de facturación, BD propia
+- [`hub-bff`](https://github.com/benjaminAndaur/hub-bff) — BFF (NestJS) que agrega Operación + Facturación; aún sin módulo frontend propio que lo consuma (ver nota abajo)
 
 ## Módulos incluidos
 
@@ -20,6 +23,8 @@ Repos relacionados:
 | `front_modulo_facturacion` | `/facturacion/` | Facturación |
 | `front_modulo_prevencion` | `/prevencion/` | Prevención / Incidentes |
 | `front_modulo_watchdog` | `/watchdog/` | Monitoreo de servicios |
+
+> No existe (todavía) un módulo frontend para el BFF (`hub-bff`). El endpoint `GET /api/v1/bff/dashboard` está disponible para consumo programático en `http://localhost:8080/api/v1/bff/dashboard`, pero no tiene una UI dedicada — pendiente si se decide construir un dashboard agregado.
 
 ## Código compartido
 

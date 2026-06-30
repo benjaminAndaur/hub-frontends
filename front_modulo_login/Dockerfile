@@ -8,7 +8,7 @@ COPY packages/ ./packages/
 COPY shared_components/ ./shared_components/
 
 WORKDIR /app/front_modulo_login
-RUN npm ci
+RUN npm install
 
 COPY front_modulo_login/ .
 RUN npm run build

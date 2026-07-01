@@ -85,3 +85,63 @@ front_modulo_x/
 5. Al montar, cada módulo llama `checkModuleAccess()` y redirige si `permisos[modulo] === "none"`.
 
 No hay tests automatizados end-to-end; algunos módulos incluyen tests unitarios con Vitest (`vitest.config.js`, `src/__tests__/`).
+
+---
+
+## Despliegue en AWS — DevOps (ISY1101)
+
+### Arquitectura en producción
+
+```
+Internet → ALB (puerto 80)
+  /* (default) → ECS Fargate Task: hub-frontend (puerto 80)  ← este servicio
+  /api/*       → ECS Fargate Task: hub-bff (puerto 3000)
+```
+
+- **Cluster:** `hub-empresarial-cluster` (AWS ECS Fargate)
+- **Imagen:** `720243276279.dkr.ecr.us-east-1.amazonaws.com/hub-frontend:<sha>` (26.05 MB)
+- **Task Definition:** 256 CPU units / 512 MB RAM, role = `LabRole`
+- **Dockerfile:** multietapa — `node:20-alpine` (build Vite) → `nginx:alpine` (serve SPA)
+- **URL pública:** `http://hub-empresarial-alb-1969847223.us-east-1.elb.amazonaws.com`
+
+### Pipeline CI/CD (GitHub Actions)
+
+Push a `main` → `.github/workflows/deploy.yml`. **Iteración real:**
+
+| Run | Estado | Causa | Duración |
+|-----|--------|-------|----------|
+| #1 | ❌ Fallido | No existía `package-lock.json` — `npm ci` falló | 13s |
+| #2 | ✅ Exitoso | Fix: cambiar `npm ci` por `npm install` en Dockerfile | 3m 52s |
+
+El run fallido y su corrección demuestran el ciclo real de desarrollo iterativo con CI/CD.
+
+### Dockerfile multietapa
+
+```dockerfile
+# Etapa 1: build de producción
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Etapa 2: servidor estático optimizado
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+```
+
+Resultado: imagen de 26 MB sirviendo la SPA compilada — sin Node.js en producción.
+
+### Verificar despliegue
+
+```bash
+# Frontend carga desde ECS
+curl -I http://hub-empresarial-alb-1969847223.us-east-1.elb.amazonaws.com/
+# HTTP/1.1 301 → /login/ (correcto)
+
+curl -I http://hub-empresarial-alb-1969847223.us-east-1.elb.amazonaws.com/login/
+# HTTP/1.1 200 OK
+```
